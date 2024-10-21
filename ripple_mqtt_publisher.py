@@ -83,7 +83,7 @@ def main():
         # Extract the farm name and generation data
         generation_assets = data.get("generation_assets", [])
         for farm in generation_assets: 
-            farm_name = farm.get("name", "solar_farm").replace(" ", "_").lower()
+            farm_name = farm.get("name").replace(" ", "_").lower()
             generation_data = farm.get("generation", {})
 
             # Publish discovery config for all time windows
@@ -93,7 +93,7 @@ def main():
             ]
             for window in time_windows:
                 publish_discovery(farm_name, window)
-            time.sleep(1) #waiting a moment for home assistant to discover the new sensors git
+            time.sleep(1) #waiting a moment for home assistant to discover the new sensors
             # Publish the latest data for each time window
             publish_data(farm_name, generation_data)
     else:
