@@ -82,8 +82,7 @@ def main():
     if data:
         # Extract the farm name and generation data
         generation_assets = data.get("generation_assets", [])
-        if len(generation_assets) > 0:
-            farm = generation_assets[0]  # Assuming there's at least one farm
+        for farm in generation_assets: 
             farm_name = farm.get("name", "solar_farm").replace(" ", "_").lower()
             generation_data = farm.get("generation", {})
 
@@ -97,8 +96,6 @@ def main():
             time.sleep(1) #waiting a moment for home assistant to discover the new sensors git
             # Publish the latest data for each time window
             publish_data(farm_name, generation_data)
-        else:
-            logging.warning("No generation assets found in API response.")
     else:
         logging.error("Failed to fetch data from the API.")
 
