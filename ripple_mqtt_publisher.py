@@ -18,7 +18,7 @@ RUN_MODE = os.getenv("RUN_MODE", "loop")  # 'loop' is default, 'cron' runs once 
 HA_DISCOVERY_PREFIX = "homeassistant"
 
 # MQTT topics (Farm name will be dynamically fetched)
-GENERATION_TOPIC_TEMPLATE = "{prefix}/sensor/{farm_name}/{time_window}/state"
+GENERATION_TOPIC_TEMPLATE = "ripple/{farm_name}/{time_window}/state"
 DISCOVERY_TOPIC_TEMPLATE = "{prefix}/sensor/{farm_name}/{time_window}/config"
 
 # Setup logging
@@ -94,7 +94,7 @@ def main():
             ]
             for window in time_windows:
                 publish_discovery(farm_name, window)
-
+            time.sleep(1) #waiting a moment for home assistant to discover the new sensors git
             # Publish the latest data for each time window
             publish_data(farm_name, generation_data)
         else:
