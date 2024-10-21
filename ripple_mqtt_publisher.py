@@ -19,7 +19,8 @@ HA_DISCOVERY_PREFIX = "homeassistant"
 
 # MQTT topics (Farm name will be dynamically fetched)
 GENERATION_TOPIC_TEMPLATE = "ripple/{farm_name}/{time_window}/state"
-DISCOVERY_TOPIC_TEMPLATE = "{prefix}/sensor/{farm_name}/{time_window}/config"
+EARNED_TOPIC_TEMPLATE = "ripple/{farm_name}/{time_window}/earned_state"
+DISCOVERY_TOPIC_TEMPLATE = "{prefix}/sensor/{farm_name}/{time_window}_{field}/config"
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -40,23 +41,41 @@ def fetch_ripple_data():
         logging.error(f"Error fetching data: {e}")
         return None
 
-# Function to publish Home Assistant discovery payloads for each time window
+# Function to publish Home Assistant discovery payloads for both generated and earned fields
 def publish_discovery(farm_name, time_window):
-    config = {
-        "name": f"{farm_name} {time_window.capitalize()}",
-        "state_topic": GENERATION_TOPIC_TEMPLATE.format(prefix=HA_DISCOVERY_PREFIX, farm_name=farm_name, time_window=time_window),
+    # Discovery config for generated field
+    generated_config = {
+        "name": f"{farm_name} {time_window.capitalize()} Generated",
+        "state_topic": GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
         "unit_of_measurement": "kWh",
         "device_class": "energy",
         "state_class": "total_increasing",
         "value_template": "{{ value_json.generated }}",
-        "unique_id": f"{farm_name}_{time_window}"
+        "unique_id": f"{farm_name}_{time_window}_generated"
     }
 
-    discovery_topic = DISCOVERY_TOPIC_TEMPLATE.format(prefix=HA_DISCOVERY_PREFIX, farm_name=farm_name, time_window=time_window)
-    client.publish(discovery_topic, json.dumps(config), retain=True)
-    logging.info(f"Published discovery message to MQTT for {time_window.capitalize()}: {discovery_topic} - {json.dumps(config)}")
+    # Discovery config for earned field
+    earned_config = {
+        "name": f"{farm_name} {time_window.capitalize()} Earned",
+        "state_topic": EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
+        "unit_of_measurement": "£",
+        "device_class": "monetary",
+        "state_class": "total_increasing",
+        "value_template": "{{ value_json.earned }}",
+        "unique_id": f"{farm_name}_{time_window}_earned"
+    }
 
-# Function to publish the latest generation data to MQTT for each time window
+    # Publish discovery messages for both generated and earned fields
+    discovery_topic_generated = DISCOVERY_TOPIC_TEMPLATE.format(prefix=HA_DISCOVERY_PREFIX, farm_name=farm_name, time_window=time_window, field="generated")
+    discovery_topic_earned = DISCOVERY_TOPIC_TEMPLATE.format(prefix=HA_DISCOVERY_PREFIX, farm_name=farm_name, time_window=time_window, field="earned")
+    
+    client.publish(discovery_topic_generated, json.dumps(generated_config), retain=True)
+    client.publish(discovery_topic_earned, json.dumps(earned_config), retain=True)
+    
+    logging.info(f"Published discovery message for {time_window.capitalize()} Generated: {discovery_topic_generated} - {json.dumps(generated_config)}")
+    logging.info(f"Published discovery message for {time_window.capitalize()} Earned: {discovery_topic_earned} - {json.dumps(earned_config)}")
+
+# Function to publish the latest generation and earned data to MQTT for each time window
 def publish_data(farm_name, generation_data):
     # Time windows to publish (based on API structure)
     time_windows = [
@@ -68,11 +87,17 @@ def publish_data(farm_name, generation_data):
     for window in time_windows:
         window_data = generation_data.get(window, {})
         generated = window_data.get("generated", 0)
+        earned = window_data.get("earned", 0)
 
         # Publish generation data
-        generation_topic = GENERATION_TOPIC_TEMPLATE.format(prefix=HA_DISCOVERY_PREFIX, farm_name=farm_name, time_window=window)
+        generation_topic = GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
         client.publish(generation_topic, json.dumps({"generated": generated}))
         logging.info(f"Published {window} generation to MQTT: {generation_topic} - {json.dumps({'generated': generated})}")
+
+        # Publish earned data
+        earned_topic = EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
+        client.publish(earned_topic, json.dumps({"earned": earned}))
+        logging.info(f"Published {window} earned to MQTT: {earned_topic} - {json.dumps({'earned': earned})}")
 
 # Main function to fetch data and publish to MQTT
 def main():
@@ -93,7 +118,8 @@ def main():
             ]
             for window in time_windows:
                 publish_discovery(farm_name, window)
-            time.sleep(1) #waiting a moment for home assistant to discover the new sensors
+            time.sleep(1)  # Waiting a moment for Home Assistant to discover the new sensors
+            
             # Publish the latest data for each time window
             publish_data(farm_name, generation_data)
     else:
