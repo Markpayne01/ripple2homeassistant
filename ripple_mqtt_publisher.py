@@ -58,7 +58,7 @@ def publish_discovery(farm_name, time_window):
     earned_config = {
         "name": f"{farm_name} {time_window.capitalize()} Earned",
         "state_topic": EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
-        "unit_of_measurement": "£",
+        "unit_of_measurement": "GBP",
         "device_class": "monetary",
         "state_class": "total",
         "value_template": "{{ value_json.earned }}",
