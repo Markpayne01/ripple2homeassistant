@@ -49,7 +49,7 @@ def publish_discovery(farm_name, time_window):
         "state_topic": GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
         "unit_of_measurement": "kWh",
         "device_class": "energy",
-        "state_class": "total_increasing",
+        "state_class": "total",
         "value_template": "{{ value_json.generated }}",
         "unique_id": f"{farm_name}_{time_window}_generated"
     }
@@ -60,7 +60,7 @@ def publish_discovery(farm_name, time_window):
         "state_topic": EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
         "unit_of_measurement": "£",
         "device_class": "monetary",
-        "state_class": "total_increasing",
+        "state_class": "total",
         "value_template": "{{ value_json.earned }}",
         "unique_id": f"{farm_name}_{time_window}_earned"
     }
