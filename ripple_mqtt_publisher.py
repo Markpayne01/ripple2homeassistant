@@ -9,7 +9,7 @@ import paho.mqtt.client as mqtt
 API_KEY = os.getenv("RIPPLE_API_KEY")
 RIPPLE_API_URL = f"https://rippleenergy.com/rest/member_data/{API_KEY}"
 MQTT_BROKER = os.getenv("MQTT_BROKER")
-MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))  # Default port is 1883
+MQTT_PORT = os.getenv("MQTT_PORT", 1883) 
 MQTT_USERNAME = os.getenv("MQTT_USERNAME")
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
 RUN_MODE = os.getenv("RUN_MODE", "loop")  # 'loop' is default, 'cron' runs once and exits
