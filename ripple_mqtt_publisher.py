@@ -45,7 +45,7 @@ def fetch_ripple_data():
 def publish_discovery(farm_name, time_window):
     # Discovery config for generated field
     generated_config = {
-        "name": f"{farm_name} {time_window.capitalize()} Generated",
+        "name": f"{farm_name} {time_window.capitalize()} Generated".replace('_', ' ').title(),
         "state_topic": GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
         "unit_of_measurement": "kWh",
         "device_class": "energy",
@@ -56,7 +56,7 @@ def publish_discovery(farm_name, time_window):
 
     # Discovery config for earned field
     earned_config = {
-        "name": f"{farm_name} {time_window.capitalize()} Earned",
+        "name": f"{farm_name} {time_window.capitalize()} Earned".replace('_', ' ').title(),
         "state_topic": EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=time_window),
         "unit_of_measurement": "GBP",
         "device_class": "monetary",
