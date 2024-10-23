@@ -103,7 +103,7 @@ def publish_data(farm_name, generation_data):
 def main():
     # Fetch the latest data from Ripple API
     data = fetch_ripple_data()
-
+    print(data)
     if data:
         # Extract the farm name and generation data
         generation_assets = data.get("generation_assets", [])
