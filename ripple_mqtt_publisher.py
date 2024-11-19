@@ -88,16 +88,19 @@ def publish_data(farm_name, generation_data):
         window_data = generation_data.get(window, {})
         generated = window_data.get("generated", 0)
         earned = window_data.get("earned", 0)
+        estimate = window_data.get("contains_estimate", True)
+        if estimate: 
+            print(f"Not publishing {window} because it contains estimates")
+        else: 
+            # Publish generation data
+            generation_topic = GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
+            client.publish(generation_topic, json.dumps({"generated": generated}))
+            logging.info(f"Published {window} generation to MQTT: {generation_topic} - {json.dumps({'generated': generated})}")
 
-        # Publish generation data
-        generation_topic = GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
-        client.publish(generation_topic, json.dumps({"generated": generated}))
-        logging.info(f"Published {window} generation to MQTT: {generation_topic} - {json.dumps({'generated': generated})}")
-
-        # Publish earned data
-        earned_topic = EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
-        client.publish(earned_topic, json.dumps({"earned": earned}))
-        logging.info(f"Published {window} earned to MQTT: {earned_topic} - {json.dumps({'earned': earned})}")
+            # Publish earned data
+            earned_topic = EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
+            client.publish(earned_topic, json.dumps({"earned": earned}))
+            logging.info(f"Published {window} earned to MQTT: {earned_topic} - {json.dumps({'earned': earned})}")
 
 # Main function to fetch data and publish to MQTT
 def main():
