@@ -89,30 +89,56 @@ def publish_data(farm_name, generation_data):
         generated = window_data.get("generated", 0)
         earned = window_data.get("earned", 0)
         estimate = window_data.get("contains_estimate", True)
-        if estimate: 
-            print(f"Not publishing {window} because it contains estimates")
-        else: 
-            # Publish generation data
-            generation_topic = GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
-            client.publish(generation_topic, json.dumps({"generated": generated}))
-            logging.info(f"Published {window} generation to MQTT: {generation_topic} - {json.dumps({'generated': generated})}")
 
-            # Publish earned data
-            earned_topic = EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
-            client.publish(earned_topic, json.dumps({"earned": earned}))
-            logging.info(f"Published {window} earned to MQTT: {earned_topic} - {json.dumps({'earned': earned})}")
+        # Publish generation data
+        generation_topic = GENERATION_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
+        client.publish(generation_topic, json.dumps({"generated": generated}))
+        logging.info(f"Published {window} generation to MQTT: {generation_topic} - {json.dumps({'generated': generated})}")
+
+        # Publish earned data
+        earned_topic = EARNED_TOPIC_TEMPLATE.format(farm_name=farm_name, time_window=window)
+        client.publish(earned_topic, json.dumps({"earned": earned}))
+        logging.info(f"Published {window} earned to MQTT: {earned_topic} - {json.dumps({'earned': earned})}")
+
+# Function to publish Home Assistant discovery config for telemetry data
+def publish_telemetry_discovery(farm_name, telemetry_key):
+    telemetry_config = {
+        "name": f"{farm_name.capitalize()} {telemetry_key.replace('_', ' ').title()}",
+        "state_topic": f"ripple/{farm_name}/telemetry/{telemetry_key}/state",
+        "unit_of_measurement": "",  # Add specific units here if needed
+        "device_class": None,  # Specify a device class if applicable
+        "value_template": "{{ value_json.value }}",
+        "unique_id": f"{farm_name}_telemetry_{telemetry_key}"
+    }
+
+    # Remove `device_class` if None to avoid invalid payloads
+    telemetry_config = {k: v for k, v in telemetry_config.items() if v is not None}
+
+    discovery_topic = f"{HA_DISCOVERY_PREFIX}/sensor/{farm_name}_telemetry_{telemetry_key}/config"
+    client.publish(discovery_topic, json.dumps(telemetry_config), retain=True)
+    logging.info(f"Published discovery for telemetry {telemetry_key}: {discovery_topic}")
+
+# Function to publish telemetry data
+def publish_telemetry_data(farm_name, telemetry_data):
+    for key, value in telemetry_data.items():
+        if key == "timestamp":
+            continue  # Skip timestamp
+
+        telemetry_topic = f"ripple/{farm_name}/telemetry/{key}/state"
+        client.publish(telemetry_topic, json.dumps({"value": value}))
+        logging.info(f"Published telemetry {key}: {telemetry_topic} - {json.dumps({'value': value})}")
 
 # Main function to fetch data and publish to MQTT
 def main():
     # Fetch the latest data from Ripple API
     data = fetch_ripple_data()
-    print(data)
     if data:
         # Extract the farm name and generation data
         generation_assets = data.get("generation_assets", [])
-        for farm in generation_assets: 
+        for farm in generation_assets:
             farm_name = farm.get("name").replace(" ", "_").lower()
             generation_data = farm.get("generation", {})
+            latest_telemetry = farm.get("generation", {}).get("latest_telemetry", {})
 
             # Publish discovery config for all time windows
             time_windows = [
@@ -125,17 +151,22 @@ def main():
             
             # Publish the latest data for each time window
             publish_data(farm_name, generation_data)
+
+            # Publish discovery and data for telemetry
+            for telemetry_key in latest_telemetry.keys():
+                if telemetry_key != "timestamp":
+                    publish_telemetry_discovery(farm_name, telemetry_key)
+            time.sleep(1)  # Allow some time for discovery
+            publish_telemetry_data(farm_name, latest_telemetry)
     else:
         logging.error("Failed to fetch data from the API.")
 
 # Main loop to periodically fetch data and publish to MQTT
 if __name__ == "__main__":
     if RUN_MODE == "cron":
-        # Run once if running via cron
         logging.info("Running in cron mode: Fetching data and exiting.")
         main()
     else:
-        # Default mode: loop forever
         logging.info("Running in loop mode: Fetching data periodically.")
         while True:
             main()

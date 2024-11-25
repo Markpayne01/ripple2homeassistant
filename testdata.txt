@@ -1,0 +1,325 @@
+return json.loads(""" 
+{
+  "copyright_notice": "Not to publish or distribute. Only for personal use.",
+  "generation_assets": [
+    {
+      "name": "Graig Fatha",
+      "type": "Windfarm",
+      "status": "Operational",
+      "total_capacity": 2.5,
+      "total_capacity_units": "MW",
+      "member_capacity": 315.431,
+      "member_capacity_units": "W",
+      "member_expected_annual_generation": 0.84,
+      "member_expected_annual_generation_units": "MWh",
+      "generation": {
+        "generation_unit": "kWh",
+        "latest_telemetry": {
+          "timestamp": "2023-03-20T15:40:00Z",
+          "wind_speed_avg": "5.391",
+          "generator_speed_avg": "0.021",
+          "blade_angle_avg": "87.518",
+          "nacelle_position": "246.000",
+          "tower_base_temp_avg": "14.364",
+          "ambient_temp_max": "11.500"
+        },
+        "latest": {
+          "timestamp": "2023-03-20T15:40:00Z",
+          "generation": -0.0002,
+          "estimated_savings": -0.0001,
+          "estimated_savings_units": "£"
+        },
+        "today": {
+          "from": "2023-03-20T00:00:00Z",
+          "to": "2023-03-20T15:40:00Z",
+          "contains_estimate": true,
+          "generated": 0.2,
+          "earned": 0.05
+        },
+        "yesterday": {
+          "from": "2023-03-19T00:00:00Z",
+          "to": "2023-03-19T23:50:00Z",
+          "contains_estimate": true,
+          "generated": 0.36,
+          "earned": 0.1
+        },
+        "this_week": {
+          "from": "2023-03-20T00:00:00Z",
+          "to": "2023-03-20T15:40:00Z",
+          "contains_estimate": true,
+          "generated": 0.2,
+          "earned": 0.05
+        },
+        "last_week": {
+          "from": "2023-03-13T00:00:00Z",
+          "to": "2023-03-19T23:50:00Z",
+          "contains_estimate": true,
+          "generated": 8.52,
+          "earned": 2.3
+        },
+        "this_month": {
+          "from": "2023-03-01T00:00:00Z",
+          "to": "2023-03-20T15:40:00Z",
+          "contains_estimate": true,
+          "generated": 30.67,
+          "earned": 8.28
+        },
+        "last_month": {
+          "from": "2023-02-01T00:00:00Z",
+          "to": "2023-03-01T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 69.83,
+          "earned": 6.73
+        },
+        "this_year": {
+          "from": "2023-01-01T00:00:00Z",
+          "to": "2023-03-20T15:40:00Z",
+          "contains_estimate": true,
+          "generated": 200.57,
+          "earned": 24.66
+        },
+        "last_year": {
+          "from": "2022-03-08T00:00:00Z",
+          "to": "2023-01-01T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 560.82,
+          "earned": 54.06
+        },
+        "total": {
+          "from": "2022-03-08T00:00:00Z",
+          "to": "2023-03-20T15:40:00Z",
+          "contains_estimate": true,
+          "generated": 781.39,
+          "earned": 88.72
+        }
+      },
+      "forecast": [
+        {
+          "period": "2023-03-20T16:00:00z",
+          "generation": 0.0168,
+          "estimated_savings": 0.0045,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T17:00:00z",
+          "generation": 0.0173,
+          "estimated_savings": 0.0047,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T18:00:00z",
+          "generation": 0.0135,
+          "estimated_savings": 0.0037,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T19:00:00z",
+          "generation": 0.0205,
+          "estimated_savings": 0.0055,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T20:00:00z",
+          "generation": 0.0245,
+          "estimated_savings": 0.0066,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T21:00:00z",
+          "generation": 0.0269,
+          "estimated_savings": 0.0073,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T22:00:00z",
+          "generation": 0.0395,
+          "estimated_savings": 0.0107,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T23:00:00z",
+          "generation": 0.0395,
+          "estimated_savings": 0.0107,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-20T23:59:59z",
+          "generation": 0.0336,
+          "estimated_savings": 0.0091,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T01:00:00z",
+          "generation": 0.0375,
+          "estimated_savings": 0.0101,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T02:00:00z",
+          "generation": 0.0396,
+          "estimated_savings": 0.0107,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T03:00:00z",
+          "generation": 0.0352,
+          "estimated_savings": 0.0095,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T04:00:00z",
+          "generation": 0.0391,
+          "estimated_savings": 0.0105,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T05:00:00z",
+          "generation": 0.0611,
+          "estimated_savings": 0.0165,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T06:00:00z",
+          "generation": 0.0567,
+          "estimated_savings": 0.0153,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T07:00:00z",
+          "generation": 0.0894,
+          "estimated_savings": 0.0241,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T08:00:00z",
+          "generation": 0.0879,
+          "estimated_savings": 0.0237,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T09:00:00z",
+          "generation": 0.158,
+          "estimated_savings": 0.0427,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T10:00:00z",
+          "generation": 0.1779,
+          "estimated_savings": 0.048,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T11:00:00z",
+          "generation": 0.1909,
+          "estimated_savings": 0.0516,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T12:00:00z",
+          "generation": 0.2449,
+          "estimated_savings": 0.0661,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T13:00:00z",
+          "generation": 0.2399,
+          "estimated_savings": 0.0648,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T14:00:00z",
+          "generation": 0.2824,
+          "estimated_savings": 0.0762,
+          "estimated_savings_units": "£"
+        },
+        {
+          "period": "2023-03-21T15:00:00z",
+          "generation": 0.2515,
+          "estimated_savings": 0.0679,
+          "estimated_savings_units": "£"
+        }
+      ]
+    },
+    {
+      "name": "Kirk Hill",
+      "type": "Windfarm",
+      "status": "N/A",
+      "total_capacity": 18.8,
+      "total_capacity_units": "MW",
+      "member_capacity": 53.324,
+      "member_capacity_units": "W",
+      "member_expected_annual_generation": 0.17,
+      "member_expected_annual_generation_units": "MWh",
+      "generation": {
+        "generation_unit": "kWh",
+        "latest_telemetry": {},
+        "latest": {},
+        "today": {
+          "from": "2023-03-20T00:00:00Z",
+          "to": "2023-03-20T15:59:19.167Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "yesterday": {
+          "from": "2023-03-19T00:00:00Z",
+          "to": "2023-03-20T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "this_week": {
+          "from": "2023-03-20T00:00:00Z",
+          "to": "2023-03-20T15:59:19.167Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "last_week": {
+          "from": "2023-03-13T00:00:00Z",
+          "to": "2023-03-20T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "this_month": {
+          "from": "2023-03-01T00:00:00Z",
+          "to": "2023-03-20T15:59:19.167Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "last_month": {
+          "from": "2023-02-01T00:00:00Z",
+          "to": "2023-03-01T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "this_year": {
+          "from": "2023-01-01T00:00:00Z",
+          "to": "2023-03-20T15:59:19.167Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "last_year": {
+          "from": "2022-01-01T00:00:00Z",
+          "to": "2023-01-01T00:00:00Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        },
+        "total": {
+          "from": "2000-01-01T00:00:00Z",
+          "to": "2023-03-20T15:59:19.167Z",
+          "contains_estimate": false,
+          "generated": 0,
+          "earned": 0
+        }
+      },
+      "forecast": []
+    }
+  ]
+}
+""")
